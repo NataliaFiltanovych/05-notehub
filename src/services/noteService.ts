@@ -1,0 +1,25 @@
+import axios from "axios";
+import type { Note } from "../types/note";
+
+const token = import.meta.env.VITE_NOTEHUB_TOKEN;
+axios.defaults.baseURL = "https://notehub-public.goit.study/api";
+
+interface Notes {
+  notes: Note[];
+  totalPages: number;
+}
+export const fetchNotes = async (
+  search: string,
+  page: number
+): Promise<Notes> => {
+  const res = await axios.get<Notes>("/notes", {
+    params: {
+      search,
+      page,
+    },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
