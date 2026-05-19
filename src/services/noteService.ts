@@ -16,6 +16,7 @@ export const fetchNotes = async (
     params: {
       search,
       page,
+      perPage: 12,
     },
     headers: {
       Authorization: `Bearer ${token}`,

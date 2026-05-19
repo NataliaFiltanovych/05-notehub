@@ -3,6 +3,9 @@ import css from "./App.module.css";
 import { fetchNotes } from "../../services/noteService";
 import { useState } from "react";
 import NoteList from "../NoteList/NoteList";
+import Pagination from "../Pagination/Pagination";
+import SearchBox from "../SearchBox/SearchBox";
+import { useDebouncedCallback } from "use-debounce";
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,12 +16,22 @@ const App = () => {
     queryFn: () => fetchNotes(searchValue, currentPage),
     placeholderData: keepPreviousData,
   });
-  console.log(data);
+
+  const handleSearch = useDebouncedCallback((query) => {
+    setSearchValue(query);
+    setCurrentPage(1);
+  }, 1000);
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-        {/* Компонент SearchBox */}
-        {/* Пагінація */}
+        <SearchBox onSearch={handleSearch} />
+        {data && data.totalPages > 1 && (
+          <Pagination
+            totalPages={data.totalPages}
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+          />
+        )}
         {/* Кнопка створення нотатки */}
       </header>
       {data && data.notes.length > 0 && <NoteList notes={data.notes} />}
