@@ -6,6 +6,8 @@ import NoteList from "../NoteList/NoteList";
 import Pagination from "../Pagination/Pagination";
 import SearchBox from "../SearchBox/SearchBox";
 import { useDebouncedCallback } from "use-debounce";
+import Modal from "../Modal/Modal";
+import NoteForm from "../NoteForm/NoteForm";
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,6 +23,13 @@ const App = () => {
     setSearchValue(query);
     setCurrentPage(1);
   }, 1000);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+
+  const closeModal = () => setIsModalOpen(false);
+
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
@@ -32,9 +41,16 @@ const App = () => {
             onPageChange={setCurrentPage}
           />
         )}
-        {/* Кнопка створення нотатки */}
+        <button className={css.button} onClick={openModal}>
+          Create note +
+        </button>
       </header>
       {data && data.notes.length > 0 && <NoteList notes={data.notes} />}
+      {isModalOpen && (
+        <Modal onClose={closeModal}>
+          <NoteForm onClose={closeModal} />
+        </Modal>
+      )}
     </div>
   );
 };
