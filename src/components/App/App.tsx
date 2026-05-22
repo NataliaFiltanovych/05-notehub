@@ -8,12 +8,14 @@ import SearchBox from "../SearchBox/SearchBox";
 import { useDebouncedCallback } from "use-debounce";
 import Modal from "../Modal/Modal";
 import NoteForm from "../NoteForm/NoteForm";
+import Loader from "../Loader/Loader";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
 
-  const { data } = useQuery({
+  const { data, isError, isLoading } = useQuery({
     queryKey: ["notes", searchValue, currentPage],
     queryFn: () => fetchNotes(searchValue, currentPage),
     placeholderData: keepPreviousData,
@@ -45,6 +47,8 @@ const App = () => {
           Create note +
         </button>
       </header>
+      {isLoading && <Loader />}
+      {isError && <ErrorMessage />}
       {data && data.notes.length > 0 && <NoteList notes={data.notes} />}
       {isModalOpen && (
         <Modal onClose={closeModal}>
