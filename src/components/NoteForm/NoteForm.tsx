@@ -80,7 +80,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
         </div>
 
         <div className={css.formGroup}>
-          <label htmlFor="tag">Tag</label>+
+          <label htmlFor="tag">Tag</label>
           <Field as="select" id="tag" name="tag" className={css.select}>
             <option value="Todo">Todo</option>
             <option value="Work">Work</option>
